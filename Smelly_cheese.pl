@@ -63,6 +63,8 @@ milk(sheep_milk).
 milk(almond_milk).
 milk(cashew_milk).
 
+rennet(cow_rennet).
+
 animal(cow).
 animal(buffalo).
 animal(goat).
@@ -77,6 +79,7 @@ madeFrom(goat_milk, goat).
 madeFrom(sheep_milk, sheep).
 madeFrom(almond_milk, almond).
 madeFrom(cashew_milk, cashew).
+madeFrom(cow_rennet, cow).
 
 mold(penicillium_roqueforti).
 mold(white_surface_mold).
@@ -103,18 +106,24 @@ hasComponent(parmigiano, cow_milk).
 hasComponent(cheddar, cow_milk).
 hasComponent(gorgonzola, cow_milk).
 hasComponent(gorgonzola, penicillium_roqueforti).
-hasComponent(granapadano, cow_milk).
+hasComponent(granaPadano, cow_milk).
 hasComponent(edam, cow_milk).
 hasComponent(gouda, goat_milk).
 hasComponent(roquefort, sheep_milk).
 hasComponent(roquefort, penicillium_roqueforti).
 
-country(italy).
-country(greece).
-country(america).
-country(france).
-country(england).
-country(netherlands).
+% Rennet composed
+hasComponent(mozzarella, cow_rennet).
+hasComponent(feta, cow_rennet).
+hasComponent(camembert, cow_rennet).
+hasComponent(brie, cow_rennet).
+hasComponent(parmesan, cow_rennet).
+hasComponent(cheddar, cow_rennet).
+hasComponent(gorgonzola, cow_rennet).
+hasComponent(granaPadano, cow_rennet).
+hasComponent(edam, cow_rennet).
+hasComponent(gouda, cow_rennet).
+hasComponent(roquefort, cow_rennet).
 
 person(maroj).
 person(pawitchaya).
@@ -168,19 +177,16 @@ hasTemperature(cheese_cave, 8).
 
 % Consume
 % Every person who is not vegan, not vegetarian and does not have lactose intolerance can eat every cheese
-canConsume(X, Y) :- \+ isVegan(X), \+ isVegetarian(X), \+ isLactoseIntolerant(X), cheese(Y), person(Y).
+canConsume(X, Y) :- person(X), \+ isVegan(X), \+ isVegetarian(X), \+ isLactoseIntolerant(X), cheese(Y).
 
 % Person who is vegetarian can eat cheese that does not have rennet that is made from animals
-CanConsume(X, Y) :- person(X), isVegetarian(X), cheese(Y), rennet(Z), animal(W), madeFrom(Z, W), \+ hasComponent(Y, Z).
+canConsume(X, Y) :- person(X), isVegetarian(X), cheese(Y), rennet(Z), animal(W), madeFrom(Z, W), \+ hasComponent(Y, Z).
 
 % Person who is vegan can eat cheese that does not have animal products(milk, rennet)
-CanConsume(X, Y) :- person(X), isVegan(X), cheese(Y), milk(W), rennet(V), animal(Z), animal(U), madeFrom(W, Z), madeFrom(V, U), \+ hasComponent(Y, W), \+ hasComponent(Y, V).
+canConsume(X, Y) :- person(X), isVegan(X), cheese(Y), milk(W), rennet(V), animal(Z), animal(U), madeFrom(W, Z), madeFrom(V, U), \+ hasComponent(Y, W), \+ hasComponent(Y, V).
 
 % Person who has LactoseIntolerance can eat cheese that does not contain milk from animals which always have lactose
 canConsume(X, Y) :- person(X), isLactoseIntolerant(X), cheese(Y), milk(W), animal(Z), madeFrom(W, Z), \+ hasComponent(Y, W).
-
-% A person should be eating items that are safe for consumption
-CanConsume(X, Y) :- person(X), cheese(Y), hasComponent(Y, W), isSafeForConsumption(W).
 
 % IsSoftCheese(X)
 isSoftCheese(X) :- cheese(X), isSoft(X), \+ isHard(X).
