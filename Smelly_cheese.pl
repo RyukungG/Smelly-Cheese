@@ -51,7 +51,6 @@ milk(almond_milk).
 milk(cashew_Milk).
 
 rennet(animal_rennet).
-rennet(vegetable_rennet).
 
 animal(cow).
 animal(buffalo).
@@ -73,9 +72,6 @@ madeFrom(animal_rennet, cow).
 madeFrom(animal_rennet, buffalo).
 madeFrom(animal_rennet, goat).
 madeFrom(animal_rennet, sheep).
-
-% vegetable rennet
-madeFrom(vegetable_rennet, mucur_miehei).
 
 mold(penicillium_roqueforti).
 mold(white_surface_mold).
