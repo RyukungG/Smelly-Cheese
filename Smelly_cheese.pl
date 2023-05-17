@@ -69,9 +69,6 @@ madeFrom(cashew_Milk, cashew).
 
 % animal rennet
 madeFrom(animal_rennet, cow).
-madeFrom(animal_rennet, buffalo).
-madeFrom(animal_rennet, goat).
-madeFrom(animal_rennet, sheep).
 
 mold(penicillium_roqueforti).
 mold(white_surface_mold).
