@@ -1,10 +1,10 @@
-%Cheese
+% Cheese
 cheese(mozzarella).
 cheese(feta).
 cheese(ricotta).
-cheese(cottage_Cheese).
-cheese(almond_Cheese).
-cheese(cashew_Cheese).
+cheese(cottage_cheese).
+cheese(almond_cheese).
+cheese(cashew_cheese).
 cheese(camembert).
 cheese(brie).
 cheese(parmesan).
@@ -16,21 +16,34 @@ cheese(edam).
 cheese(gouda).
 cheese(roquefort).
 
+% Fresh Cheeses
 isFresh(mozzarella).
 isFresh(feta).
 isFresh(ricotta).
-isFresh(cottage_Cheese).
-isFresh(almond_Cheese).
-isFresh(cashew_Cheese).
+isFresh(cottage_cheese).
+isFresh(almond_cheese).
+isFresh(cashew_cheese).
 
 % Soft Cheeses
 isSoft(camembert).
 isSoft(brie).
+isSoft(mozzarella).
+isSoft(feta).
+isSoft(ricotta).
+isSoft(cottage_cheese).
+isSoft(almond_cheese).
+isSoft(cashew_cheese).
+isSoft(cheddar).
+isSoft(edam).
+isSoft(gouda).
 
 % Hard Cheeses
 isHard(parmesan).
 isHard(parmigiano).
 isHard(granaPadano).
+isHard(cheddar).
+isHard(edam).
+isHard(gouda).
 
 isAged(camembert).
 isAged(brie).
@@ -43,12 +56,12 @@ isAged(edam).
 isAged(gouda).
 isAged(roquefort).
 
-milk(cow_Milk).
-milk(buffalo_Milk).
-milk(goat_Milk).
-milk(sheep_Milk).
+milk(cow_milk).
+milk(buffalo_milk).
+milk(goat_milk).
+milk(sheep_milk).
 milk(almond_milk).
-milk(cashew_Milk).
+milk(cashew_milk).
 
 animal(cow).
 animal(buffalo).
@@ -58,12 +71,12 @@ animal(sheep).
 plant(almond).
 plant(cashew).
 
-madeFrom(cow_Milk, cow).
-madeFrom(buffalo_Milk, buffalo).
-madeFrom(goat_Milk, goat).
-madeFrom(sheep_Milk, sheep).
-madeFrom(almond_Milk, almond).
-madeFrom(cashew_Milk, cashew).
+madeFrom(cow_milk, cow).
+madeFrom(buffalo_milk, buffalo).
+madeFrom(goat_milk, goat).
+madeFrom(sheep_milk, sheep).
+madeFrom(almond_milk, almond).
+madeFrom(cashew_milk, cashew).
 
 mold(penicillium_roqueforti).
 mold(white_surface_mold).
@@ -72,25 +85,28 @@ blue(penicillium_roqueforti).
 
 white(white_surface_mold).
 
-hasComponent(mozzarella, buffalo_Milk).
-hasComponent(feta, goat_Milk).
-hasComponent(ricotta, sheep_Milk).
-hasComponent(cottage_Cheese, cow_Milk).
-hasComponent(almond_Cheese, almond_Milk).
-hasComponent(cashew_Cheese, cashew_Milk).
-hasComponent(camembert, cow_Milk).
+isSafeForConsumption(penicillium_roqueforti).
+isSafeForConsumption(white_surface_mold).
+
+hasComponent(mozzarella, buffalo_milk).
+hasComponent(feta, goat_milk).
+hasComponent(ricotta, sheep_milk).
+hasComponent(cottage_Cheese, cow_milk).
+hasComponent(almond_Cheese, almond_milk).
+hasComponent(cashew_Cheese, cashew_milk).
+hasComponent(camembert, cow_milk).
 hasComponent(camembert, white_surface_mold).
-hasComponent(brie, cow_Milk).
+hasComponent(brie, cow_milk).
 hasComponent(brie, white_surface_mold).
-hasComponent(parmesan, cow_Milk).
-hasComponent(parmigiano, cow_Milk).
-hasComponent(cheddar, cow_Milk).
-hasComponent(gorgonzola, cow_Milk).
+hasComponent(parmesan, cow_milk).
+hasComponent(parmigiano, cow_milk).
+hasComponent(cheddar, cow_milk).
+hasComponent(gorgonzola, cow_milk).
 hasComponent(gorgonzola, penicillium_roqueforti).
-hasComponent(granapadano, cow_Milk).
-hasComponent(edam, cow_Milk).
-hasComponent(gouda, goat_Milk).
-hasComponent(roquefort, sheep_Milk).
+hasComponent(granapadano, cow_milk).
+hasComponent(edam, cow_milk).
+hasComponent(gouda, goat_milk).
+hasComponent(roquefort, sheep_milk).
 hasComponent(roquefort, penicillium_roqueforti).
 
 country(italy).
@@ -103,9 +119,9 @@ country(netherlands).
 originatedFrom(mozzarella, italy).
 originatedFrom(feta, greece).
 originatedFrom(ricotta, italy).
-originatedFrom(cottage_Cheese, america).
-originatedFrom(almond_Cheese, america).
-originatedFrom(cashew_Cheese, america).
+originatedFrom(cottage_cheese, america).
+originatedFrom(almond_cheese, america).
+originatedFrom(cashew_cheese, america).
 originatedFrom(camembert, france).
 originatedFrom(brie, france).
 originatedFrom(parmesan, italy).
@@ -132,20 +148,21 @@ isVegetarian(pakorn).
 isLactoseIntolerant(pawitchaya).
 
 % MeltAt({cheese}, {celsius})
-MeltAt(camembert, 55).
-MeltAt(brie, 55).
-MeltAt(parmesan, 82).
-MeltAt(parmigiano, 82).
-MeltAt(granaPadano, 82).
+meltAt(camembert, 55).
+meltAt(brie, 55).
+meltAt(parmesan, 82).
+meltAt(parmigiano, 82).
+meltAt(granaPadano, 82).
 
 % Every person who is not vegan, not vegetarian and does not have lactose intolerance can eat every cheese
-CanConsume(x, y) :- \+ isVegan(x), \+ isVegetarian(x), \+ isLactoseIntolerant(x), cheese(y), person(x).
+canConsume(X, Y) :- \+ isVegan(X), \+ isVegetarian(X), \+ isLactoseIntolerant(X), cheese(Y), person(Y).
 
 % Person who has LactoseIntolerance can eat cheese that does not contain milk from animals which always have lactose
-CanConsume(X, Y) :- isLactoseIntolerant(X), cheese(Y), forall(milk(W), animal(Z), madeFrom(W, Z), \+ hasComponent(Y, W)).
+canConsume(X, Y) :- isLactoseIntolerant(X), cheese(Y), forall(milk(W), animal(Z), madeFrom(W, Z), \+ hasComponent(Y, W)).
 
 % IsSoftCheese(X)
 isSoftCheese(X) :- cheese(X), isSoft(X), \+ isHard(X).
+isSoftCheese(X) :- cheese(X), isSoft(X), \+ isHard(X), mold(Y), white(Y), isSafeForConsumption(Y), hasComponent(X,Y).
 
 % isSemiFirmCheese(X)
 isSemiFirmCheese(X) :- cheese(X), isSoft(X), isHard(X).
@@ -154,7 +171,10 @@ isSemiFirmCheese(X) :- cheese(X), isSoft(X), isHard(X).
 isHardCheese(X) :- cheese(X), isHard(X), \+ isSoft(X).
 
 % isAgedCheese(X)
-isAgedCheese(X) :- cheese(X), isHard(X), isAged(X), \+ isFresh(X).
+isAgedCheese(X) :- cheese(X), isAged(X), \+ isFresh(X).
 
 % isFreshCheese(X)
 isFreshCheese(X) :- cheese(X), isSoft(X), isFresh(X), \+ isHard(X).
+
+% isBlueCheese(X)
+isBlueCheese(X) :- cheese(X), isAged(X), mold(Y), blue(Y), isSafeForConsumption(Y), hasComponent(X, Y).
