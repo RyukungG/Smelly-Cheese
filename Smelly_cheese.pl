@@ -183,11 +183,22 @@ hasTemperature(refrigerator, 4).
 hasTemperature(cellar, 18).
 hasTemperature(cheese_cave, 8).
 
+% Consume
 % Every person who is not vegan, not vegetarian and does not have lactose intolerance can eat every cheese
 canConsume(X, Y) :- \+ isVegan(X), \+ isVegetarian(X), \+ isLactoseIntolerant(X), cheese(Y), person(Y).
 
 % Person who has LactoseIntolerance can eat cheese that does not contain milk from animals which always have lactose
-canConsume(X, Y) :- isLactoseIntolerant(X), cheese(Y), forall(milk(W), animal(Z), madeFrom(W, Z), \+ hasComponent(Y, W)).
+canConsume(X, Y) :- isLactoseIntolerant(X), cheese(Y), milk(W), animal(Z), madeFrom(W, Z), \+ hasComponent(Y, W).
+
+$ Person who is vegan can eat cheese that does not have animal products(milk, rennet)
+CanConsume(X, Y) :- person(X), vegan(X), cheese(Y), milk(W), rennet(V), animal(Z), animal(U), madeFrom(W, Z), madeFrom(V, U), \+ hasComponent(Y, W), \+ hasComponent(Y, V).
+
+% Person who is vegetarian can eat cheese that does not have rennet that is made from animals
+CanConsume(X, Y) :- person(X), vegetarian(X), cheese(Y), rennet(Z), animal(W), 
+madeFrom(Z, W), \+ hasComponent(Y, Z).
+
+% A person should be eating items that are safe for consumption
+CanConsume(X, Y) :- person(X), cheese(Y), hasComponent(Y, W), isSafeForConsumption(W).
 
 % IsSoftCheese(X)
 isSoftCheese(X) :- cheese(X), isSoft(X), \+ isHard(X).
