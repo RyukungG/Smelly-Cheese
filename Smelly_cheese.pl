@@ -50,6 +50,9 @@ milk(sheep_Milk).
 milk(almond_milk).
 milk(cashew_Milk).
 
+rennet(animal_rennet).
+rennet(vegetable_rennet).
+
 animal(cow).
 animal(buffalo).
 animal(goat).
@@ -65,8 +68,18 @@ madeFrom(sheep_Milk, sheep).
 madeFrom(almond_Milk, almond).
 madeFrom(cashew_Milk, cashew).
 
+% animal rennet
+madeFrom(animal_rennet, cow).
+madeFrom(animal_rennet, buffalo).
+madeFrom(animal_rennet, goat).
+madeFrom(animal_rennet, sheep).
+
+% vegetable rennet
+madeFrom(vegetable_rennet, mucur_miehei).
+
 mold(penicillium_roqueforti).
 mold(white_surface_mold).
+mold(mucur_miehei).
 
 blue(penicillium_roqueforti).
 
@@ -92,6 +105,20 @@ hasComponent(edam, cow_Milk).
 hasComponent(gouda, goat_Milk).
 hasComponent(roquefort, sheep_Milk).
 hasComponent(roquefort, penicillium_roqueforti).
+
+% rennet
+% ricotta, cottage, almond, cashew practically never have rennet.
+hasComponent(mozzarella, animal_rennet).
+hasComponent(feta, animal_rennet).
+hasComponent(camembert, animal_rennet).
+hasComponent(brie, animal_rennet).
+hasComponent(parmesan, animal_rennet).
+hasComponent(cheddar, animal_rennet).
+hasComponent(gorgonzola, animal_rennet).
+hasComponent(granapadano, animal_rennet).
+hasComponent(edam, animal_rennet).
+hasComponent(gouda, animal_rennet).
+hasComponent(roquefort, animal_rennet).
 
 country(italy).
 country(greece).
@@ -131,6 +158,13 @@ isVegetarian(pakorn).
 
 isLactoseIntolerant(pawitchaya).
 
+% Celsius(_{celsius}_)
+Celsius(55).
+Celsius(82).
+Celsius(5).
+% average room temperature
+Celsius(25).
+
 % MeltAt({cheese}, {celsius})
 MeltAt(camembert, 55).
 MeltAt(brie, 55).
@@ -138,12 +172,28 @@ MeltAt(parmesan, 82).
 MeltAt(parmigiano, 82).
 MeltAt(granaPadano, 82).
 
+% Place
+Place(fridge).
+
+% HasTemperature(_{object}_, _{celcius}_)
+HasTemperature(fridge, 5).
+
+% CanConsume(_{person_name}_, _{cheese}_)
+
 % Every person who is not vegan, not vegetarian and does not have lactose intolerance can eat every cheese
 CanConsume(x, y) :- \+ isVegan(x), \+ isVegetarian(x), \+ isLactoseIntolerant(x), cheese(y), person(x).
 
 % Person who has LactoseIntolerance can eat cheese that does not contain milk from animals which always have lactose
 CanConsume(X, Y) :- isLactoseIntolerant(X), cheese(Y), forall(milk(W), animal(Z), madeFrom(W, Z), \+ hasComponent(Y, W)).
 
+% Person who is vegan can eat cheese that does not have animal products(milk, rennet)
+CanConsume(x, y) :- person(x), vegan(x), cheese(y), milk(w), rennet(v), animal(z),animal(u), madeFrom(w, z), madeFrom(v, u), \+ hasComponent(y, w), 
+\+ hasComponent(y, v).
+
+% Person who is vegetarian can eat cheese that does not have rennet that is made from animals
+CanConsume(x, y) :- person(x), vegetarian(x), cheese(y), rennet(z), animal(w), 
+madeFrom(z, w), \+ hasComponent(y, z).
+ 
 % IsSoftCheese(X)
 isSoftCheese(X) :- cheese(X), isSoft(X), \+ isHard(X).
 
