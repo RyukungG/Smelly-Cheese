@@ -116,23 +116,6 @@ country(france).
 country(england).
 country(netherlands).
 
-originatedFrom(mozzarella, italy).
-originatedFrom(feta, greece).
-originatedFrom(ricotta, italy).
-originatedFrom(cottage_cheese, america).
-originatedFrom(almond_cheese, america).
-originatedFrom(cashew_cheese, america).
-originatedFrom(camembert, france).
-originatedFrom(brie, france).
-originatedFrom(parmesan, italy).
-originatedFrom(parmigiano, italy).
-originatedFrom(cheddar, england).
-originatedFrom(gorgonzola, italy).
-originatedFrom(granapadano, italy).
-originatedFrom(edam, netherlands).
-originatedFrom(gouda, netherlands).
-originatedFrom(roquefort, france).
-
 person(maroj).
 person(pawitchaya).
 person(pakorn).
@@ -188,10 +171,10 @@ hasTemperature(cheese_cave, 8).
 canConsume(X, Y) :- \+ isVegan(X), \+ isVegetarian(X), \+ isLactoseIntolerant(X), cheese(Y), person(Y).
 
 % Person who is vegetarian can eat cheese that does not have rennet that is made from animals
-CanConsume(X, Y) :- person(X), vegetarian(X), cheese(Y), rennet(Z), animal(W), madeFrom(Z, W), \+ hasComponent(Y, Z).
+CanConsume(X, Y) :- person(X), isVegetarian(X), cheese(Y), rennet(Z), animal(W), madeFrom(Z, W), \+ hasComponent(Y, Z).
 
 % Person who is vegan can eat cheese that does not have animal products(milk, rennet)
-CanConsume(X, Y) :- person(X), vegan(X), cheese(Y), milk(W), rennet(V), animal(Z), animal(U), madeFrom(W, Z), madeFrom(V, U), \+ hasComponent(Y, W), \+ hasComponent(Y, V).
+CanConsume(X, Y) :- person(X), isVegan(X), cheese(Y), milk(W), rennet(V), animal(Z), animal(U), madeFrom(W, Z), madeFrom(V, U), \+ hasComponent(Y, W), \+ hasComponent(Y, V).
 
 % Person who has LactoseIntolerance can eat cheese that does not contain milk from animals which always have lactose
 canConsume(X, Y) :- person(X), isLactoseIntolerant(X), cheese(Y), milk(W), animal(Z), madeFrom(W, Z), \+ hasComponent(Y, W).
@@ -218,7 +201,8 @@ isFreshCheese(X) :- cheese(X), isSoft(X), isFresh(X), \+ isHard(X).
 % isBlueCheese(X)
 isBlueCheese(X) :- cheese(X), isAged(X), mold(Y), blue(Y), isSafeForConsumption(Y), hasComponent(X, Y).
 
-isLocalCheese(X, V) :- cheese(X), milk(Y), rennet(Z), country(V), hasComponent(X,Y), hasComponent(X,Z), originatedFrom(Y,V), originatedFrom(Z,V), originatedFrom(X,V).
+% Crystal formation
+containCrystal(X) :- cheese(X), isAgedCheese(X), isHardCheese(X), milk(Y), animal(Z), madeFrom(Y,Z), hasComponent(X,Y).
 
 % canBeStoredIn(X, Y)
 canBeStoredIn(X, Y) :- cheese(X), place(Y), meltAt(X, Z), hasTemperature(Y, W), (Z > W).
