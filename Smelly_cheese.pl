@@ -211,3 +211,9 @@ isAgedCheese(X) :- cheese(X), isHard(X), isAged(X), \+ isFresh(X).
 
 % isFreshCheese(X)
 isFreshCheese(X) :- cheese(X), isSoft(X), isFresh(X), \+ isHard(X).
+
+% IsSharpTasting: x cheese tastes sharp and mature if it is aged
+IsSharpTasting(X) :- cheese(X), isAged(X).
+
+% IsMildTasting: x cheese tastes mild if it is not aged
+IsMildTasting(X) :- cheese(X), \+ isAged(X).
