@@ -91,9 +91,9 @@ isSafeForConsumption(white_surface_mold).
 hasComponent(mozzarella, buffalo_milk).
 hasComponent(feta, goat_milk).
 hasComponent(ricotta, sheep_milk).
-hasComponent(cottage_Cheese, cow_milk).
-hasComponent(almond_Cheese, almond_milk).
-hasComponent(cashew_Cheese, cashew_milk).
+hasComponent(cottage_cheese, cow_milk).
+hasComponent(almond_cheese, almond_milk).
+hasComponent(cashew_cheese, cashew_milk).
 hasComponent(camembert, cow_milk).
 hasComponent(camembert, white_surface_mold).
 hasComponent(brie, cow_milk).
@@ -148,11 +148,40 @@ isVegetarian(pakorn).
 isLactoseIntolerant(pawitchaya).
 
 % MeltAt({cheese}, {celsius})
+meltAt(mozzarella, 52).
+meltAt(feta, 55).
+meltAt(ricotta, 55).
+meltAt(cottage_cheese, 55).
+meltAt(almond_cheese, 55).
+meltAt(cashew_cheese, 55).
 meltAt(camembert, 55).
 meltAt(brie, 55).
 meltAt(parmesan, 82).
 meltAt(parmigiano, 82).
 meltAt(granaPadano, 82).
+meltAt(cheddar, 65).
+meltAt(edam, 65).
+meltAt(gouda, 65).
+meltAt(gorgonzola, 65).
+meltAt(roquefort, 65).
+
+% Place
+place(heated_oven).
+place(direct_sunlight).
+place(room_with_no_air_conditioner).
+place(room_with_air_conditioner).
+place(refrigerator).
+place(cellar).
+place(cheese_cave).
+
+% hasTemperature(X, Y)
+hasTemperature(heated_oven, 90).
+hasTemperature(direct_sunlight, 60).
+hasTemperature(room_with_no_air_conditioner, 32).
+hasTemperature(room_with_air_conditioner, 25).
+hasTemperature(refrigerator, 4).
+hasTemperature(cellar, 18).
+hasTemperature(cheese_cave, 8).
 
 % Every person who is not vegan, not vegetarian and does not have lactose intolerance can eat every cheese
 canConsume(X, Y) :- \+ isVegan(X), \+ isVegetarian(X), \+ isLactoseIntolerant(X), cheese(Y), person(Y).
@@ -178,3 +207,6 @@ isFreshCheese(X) :- cheese(X), isSoft(X), isFresh(X), \+ isHard(X).
 
 % isBlueCheese(X)
 isBlueCheese(X) :- cheese(X), isAged(X), mold(Y), blue(Y), isSafeForConsumption(Y), hasComponent(X, Y).
+
+% canBeStoredIn(X, Y)
+canBeStoredIn(X, Y) :- cheese(X), place(Y), meltAt(X, Z), hasTemperature(Y, W), (Z > W).
