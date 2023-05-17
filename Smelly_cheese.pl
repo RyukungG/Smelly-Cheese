@@ -23,6 +23,15 @@ isFresh(cottage_Cheese).
 isFresh(almond_Cheese).
 isFresh(cashew_Cheese).
 
+% Soft Cheeses
+isSoft(camembert).
+isSoft(brie).
+
+% Hard Cheeses
+isHard(parmesan).
+isHard(parmigiano).
+isHard(granaPadano).
+
 isAged(camembert).
 isAged(brie).
 isAged(parmesan).
@@ -121,3 +130,31 @@ isVegan(karen).
 isVegetarian(pakorn).
 
 isLactoseIntolerant(pawitchaya).
+
+% MeltAt({cheese}, {celsius})
+MeltAt(camembert, 55).
+MeltAt(brie, 55).
+MeltAt(parmesan, 82).
+MeltAt(parmigiano, 82).
+MeltAt(granaPadano, 82).
+
+% Every person who is not vegan, not vegetarian and does not have lactose intolerance can eat every cheese
+CanConsume(x, y) :- \+ isVegan(x), \+ isVegetarian(x), \+ isLactoseIntolerant(x), cheese(y), person(x).
+
+% Person who has LactoseIntolerance can eat cheese that does not contain milk from animals which always have lactose
+CanConsume(X, Y) :- isLactoseIntolerant(X), cheese(Y), forall(milk(W), animal(Z), madeFrom(W, Z), \+ hasComponent(Y, W)).
+
+% IsSoftCheese(X)
+isSoftCheese(X) :- cheese(X), isSoft(X), \+ isHard(X).
+
+% isSemiFirmCheese(X)
+isSemiFirmCheese(X) :- cheese(X), isSoft(X), isHard(X).
+
+% isHardCheese
+isHardCheese(X) :- cheese(X), isHard(X), \+ isSoft(X).
+
+% isAgedCheese(X)
+isAgedCheese(X) :- cheese(X), isHard(X), isAged(X), \+ isFresh(X).
+
+% isFreshCheese(X)
+isFreshCheese(X) :- cheese(X), isSoft(X), isFresh(X), \+ isHard(X).
