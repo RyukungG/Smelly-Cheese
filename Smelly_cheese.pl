@@ -186,7 +186,7 @@ canConsume(X, Y) :- person(X), isVegetarian(X), cheese(Y), rennet(Z), animal(W),
 canConsume(X, Y) :- person(X), isVegan(X), cheese(Y), milk(W), rennet(V), animal(Z), animal(U), madeFrom(W, Z), madeFrom(V, U), \+ hasComponent(Y, W), \+ hasComponent(Y, V).
 
 % Person who has LactoseIntolerance can eat cheese that does not contain milk from animals which always have lactose
-canConsume(X, Y) :- person(X), isLactoseIntolerant(X), cheese(Y), milk(W), animal(Z), madeFrom(W, Z), \+ hasComponent(Y, W).
+canConsume(X, Y) :- person(X), isLactoseIntolerant(X), cheese(Y), \+ (milk(W), animal(Z), madeFrom(W, Z), hasComponent(Y, W)).
 
 % IsSoftCheese(X)
 isSoftCheese(X) :- cheese(X), isSoft(X), \+ isHard(X).
