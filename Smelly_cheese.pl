@@ -178,6 +178,9 @@ Place(fridge).
 % HasTemperature(_{object}_, _{celcius}_)
 HasTemperature(fridge, 5).
 
+% CanBeStoredIn: x cheese can be stored in y place if the temperature of the place is lower than the melting point of the cheese.
+CanBeStoredIn(X, Y) :- cheese(X), place(Y), Celsius(Z), Celsius(W), meltAt(X, Z), hasTemperature(Y, W), Z > W.
+
 % CanConsume(_{person_name}_, _{cheese}_)
 
 % Every person who is not vegan, not vegetarian and does not have lactose intolerance can eat every cheese
