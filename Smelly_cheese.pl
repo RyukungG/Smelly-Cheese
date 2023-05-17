@@ -183,7 +183,7 @@ canConsume(X, Y) :- person(X), \+ isVegan(X), \+ isVegetarian(X), \+ isLactoseIn
 canConsume(X, Y) :- person(X), isVegetarian(X), cheese(Y), rennet(Z), animal(W), madeFrom(Z, W), \+ hasComponent(Y, Z).
 
 % Person who is vegan can eat cheese that does not have animal products(milk, rennet)
-canConsume(X, Y) :- person(X), isVegan(X), cheese(Y), milk(W), rennet(V), animal(Z), animal(U), madeFrom(W, Z), madeFrom(V, U), \+ hasComponent(Y, W), \+ hasComponent(Y, V).
+canConsume(X, Y) :- person(X), isVegan(X), cheese(Y), \+ (milk(W), animal(Z), madeFrom(W, Z), hasComponent(Y, W)), \+ (rennet(V), animal(U), madeFrom(V, U), hasComponent(Y, V)).
 
 % Person who has LactoseIntolerance can eat cheese that does not contain milk from animals which always have lactose
 canConsume(X, Y) :- person(X), isLactoseIntolerant(X), cheese(Y), \+ (milk(W), animal(Z), madeFrom(W, Z), hasComponent(Y, W)).
