@@ -158,7 +158,18 @@ meltAt(granaPadano, 82).
 canConsume(X, Y) :- \+ isVegan(X), \+ isVegetarian(X), \+ isLactoseIntolerant(X), cheese(Y), person(Y).
 
 % Person who has LactoseIntolerance can eat cheese that does not contain milk from animals which always have lactose
-canConsume(X, Y) :- isLactoseIntolerant(X), cheese(Y), forall(milk(W), animal(Z), madeFrom(W, Z), \+ hasComponent(Y, W)).
+canConsume(X, Y) :- isLactoseIntolerant(X), cheese(Y), milk(W), animal(Z), madeFrom(W, Z), \+ hasComponent(Y, W).
+
+% Person who is vegan can eat cheese that does not have animal products(milk, rennet)
+CanConsume(x, y) :- person(x), vegan(x), cheese(y), milk(w), rennet(v), animal(z), animal(u), madeFrom(w, z), madeFrom(v, u), \+ hasComponent(y, w), 
+\+ hasComponent(y, v).
+
+% Person who is vegetarian can eat cheese that does not have rennet that is made from animals
+CanConsume(x, y) :- person(x), vegetarian(x), cheese(y), rennet(z), animal(w), 
+madeFrom(z, w), \+ hasComponent(y, z).
+
+% A person shouldn't be eating items that are unsafe for consumption
+CanConsume(x, y) :- person(x), cheese(y), hasComponent(y, w), isSafeForConsumption(w).
 
 % IsSoftCheese(X)
 isSoftCheese(X) :- cheese(X), isSoft(X), \+ isHard(X).
