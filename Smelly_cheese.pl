@@ -218,5 +218,13 @@ isFreshCheese(X) :- cheese(X), isSoft(X), isFresh(X), \+ isHard(X).
 % isBlueCheese(X)
 isBlueCheese(X) :- cheese(X), isAged(X), mold(Y), blue(Y), isSafeForConsumption(Y), hasComponent(X, Y).
 
+isLocalCheese(X, V) :- cheese(X), milk(Y), rennet(Z), country(V), hasComponent(X,Y), hasComponent(X,Z), originatedFrom(Y,V), originatedFrom(Z,V), originatedFrom(X,V).
+
 % canBeStoredIn(X, Y)
 canBeStoredIn(X, Y) :- cheese(X), place(Y), meltAt(X, Z), hasTemperature(Y, W), (Z > W).
+
+% IsSharpTasting: x cheese tastes sharp and mature if it is aged
+isSharpTasting(X) :- cheese(X), isAged(X).
+
+% IsMildTasting: x cheese tastes mild if it is not aged
+isMildTasting(X) :- cheese(X), \+ isAged(X).
