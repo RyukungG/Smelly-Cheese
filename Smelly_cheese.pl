@@ -180,7 +180,7 @@ hasTemperature(cheese_cave, 8).
 canConsume(X, Y) :- person(X), \+ isVegan(X), \+ isVegetarian(X), \+ isLactoseIntolerant(X), cheese(Y).
 
 % Person who is vegetarian can eat cheese that does not have rennet that is made from animals
-canConsume(X, Y) :- person(X), isVegetarian(X), cheese(Y), rennet(Z), animal(W), madeFrom(Z, W), \+ hasComponent(Y, Z).
+canConsume(X, Y) :- person(X), isVegetarian(X), cheese(Y), \+ (rennet(Z), animal(W), madeFrom(Z, W), hasComponent(Y, Z)).
 
 % Person who is vegan can eat cheese that does not have animal products(milk, rennet)
 canConsume(X, Y) :- person(X), isVegan(X), cheese(Y), \+ (milk(W), animal(Z), madeFrom(W, Z), hasComponent(Y, W)), \+ (rennet(V), animal(U), madeFrom(V, U), hasComponent(Y, V)).

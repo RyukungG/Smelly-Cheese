@@ -56,7 +56,8 @@ isMildTasting(almond_cheese).
 ### canConsume({_Person_}, {_Cheese_}):
 #### Person who is vegetarian can only eat cheese that does not contain animal based rennet.
 ```
-canConsume(pakorn, brie).
+canConsume(pakorn, brie). // cow rennet
+canConsume(pakorn, cottage_cheese). // no rennet
 ```
 
 ## 4. Can vegan X eat Y cheese?
@@ -88,6 +89,5 @@ canBeStoredIn(parmesan, room_with_no_air_conditioner). // T
 ```
 containCrystal(parmigiano). // T ( isHardCheese isAgedCheese Animal-Milk )
 containCrystal(granaPadano). // T ( isHardCheese isAgedCheese Animal-Milk )
-containCrystal(brie). // F ( X isHardCheese )
 containCrystal(gouda). // F ( X isHardCheese )
 ```
